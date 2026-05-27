@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natural English or Not? — Collocation Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fc;
+    --surface: #ffffff;
+    --surface-alt: #eef1f8;
+    --border: #d8dde8;
+    --border-light: #eceff6;
+    --text-primary: #1a1f2e;
+    --text-secondary: #5a6278;
+    --text-muted: #8a93a8;
+    --accent: #2a5caa;
+    --accent-light: #d4e2f7;
+    --accent-mid: #4a7fd4;
+    --natural: #1a7a4a;
+    --natural-bg: #e8f6ee;
+    --natural-border: #b2dfc4;
+    --unnatural: #b03a2e;
+    --unnatural-bg: #fdf0ee;
+    --unnatural-border: #f4c0bb;
+    --neutral: #4a5568;
+    --shadow-sm: 0 1px 3px rgba(42,92,170,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 16px rgba(42,92,170,0.10), 0 2px 6px rgba(0,0,0,0.05);
+    --shadow-lg: 0 12px 40px rgba(42,92,170,0.14), 0 4px 12px rgba(0,0,0,0.07);
+    --radius: 12px;
+    --radius-sm: 7px;
+    --radius-pill: 999px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 60px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    width: 100%;
+    max-width: 680px;
+    padding: 36px 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(42,92,170,0.15);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-top: 6px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+
+  /* ── MAIN CARD ── */
+  .card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 36px 40px;
+    margin-top: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (max-width: 500px) {
+    .card { padding: 24px 20px; }
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    margin-bottom: 28px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .progress-fraction {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 5px;
+    background: var(--surface-alt);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    border-radius: var(--radius-pill);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  /* ── QUESTION ── */
+  .question-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+    font-weight: 400;
+    margin-bottom: 10px;
+    min-height: 3.5em;
+    font-style: italic;
+  }
+
+  .question-text .highlight {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 1px;
+  }
+
+  .question-type {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: normal;
+    margin-bottom: 24px;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  /* ── ANSWER BUTTONS ── */
+  .answer-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .btn-answer {
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-answer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .btn-answer:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-answer:active:not(:disabled) { transform: translateY(0); }
+  .btn-answer:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .btn-answer .btn-icon {
+    font-size: 1.1em;
+    line-height: 1;
+  }
+
+  .btn-answer.correct-answer {
+    background: var(--natural-bg);
+    border-color: var(--natural-border);
+    color: var(--natural);
+    font-weight: 600;
+  }
+
+  .btn-answer.wrong-answer {
+    background: var(--unnatural-bg);
+    border-color: var(--unnatural-border);
+    color: var(--unnatural);
+    font-weight: 600;
+  }
+
+  /* ── FEEDBACK BOX ── */
+  .feedback {
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: none;
+    animation: fadeSlideIn 0.28s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .feedback.show { display: block; }
+
+  .feedback.correct {
+    background: var(--natural-bg);
+    border-color: var(--natural);
+    border-left-color: var(--natural);
+  }
+
+  .feedback.incorrect {
+    background: var(--unnatural-bg);
+    border-color: var(--unnatural-border);
+    border-left-color: var(--unnatural);
+  }
+
+  .feedback-verdict {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .feedback.correct .feedback-verdict { color: var(--natural); }
+  .feedback.incorrect .feedback-verdict { color: var(--unnatural); }
+
+  .feedback-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .feedback.correct .feedback-title { color: var(--natural); }
+  .feedback.incorrect .feedback-title { color: var(--unnatural); }
+
+  .feedback-explanation {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    font-style: normal;
+  }
+
+  .collocation-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+  }
+
+  .collocation-note strong {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .btn-next {
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-next:hover { background: #1f4a8a; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .btn-next:active { transform: translateY(0); }
+  .btn-next.show { display: flex; animation: fadeSlideIn 0.22s ease; }
+
+  /* ── SCORE SCREEN ── */
+  #score-screen {
+    display: none;
+    text-align: center;
+    animation: fadeSlideIn 0.4s ease;
+  }
+
+  #score-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 28px;
+  }
+
+  .score-ring {
+    width: 130px;
+    height: 130px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-ring svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .score-ring-bg { fill: none; stroke: var(--surface-alt); stroke-width: 8; }
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 0 314;
+    transition: stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1;
+    z-index: 1;
+  }
+
+  .score-total {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+  }
+
+  .score-band {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .score-band.excellent { background: var(--natural-bg); color: var(--natural); border: 1px solid var(--natural-border); }
+  .score-band.good { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(42,92,170,0.2); }
+  .score-band.fair { background: #fff8e8; color: #8a6a1a; border: 1px solid #f0d898; }
+  .score-band.needs-work { background: var(--unnatural-bg); color: var(--unnatural); border: 1px solid var(--unnatural-border); }
+
+  .score-message {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 400px;
+    margin: 0 auto 28px;
+    font-weight: 300;
+  }
+
+  .score-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .breakdown-cell {
+    background: var(--surface-alt);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+  }
+
+  .breakdown-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .breakdown-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-top: 5px;
+  }
+
+  .btn-restart {
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s ease;
+    margin-bottom: 12px;
+  }
+
+  .btn-restart:hover { background: #1f4a8a; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+  /* ── LEARN MORE ── */
+  .learn-more-toggle {
+    width: 100%;
+    max-width: 680px;
+    margin-top: 20px;
+  }
+
+  .learn-toggle-btn {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 400;
+    transition: all 0.18s ease;
+  }
+
+  .learn-toggle-btn:hover { background: var(--surface-alt); border-color: var(--accent); }
+
+  .learn-toggle-btn .arrow {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: transform 0.22s ease;
+  }
+
+  .learn-toggle-btn.open .arrow { transform: rotate(180deg); }
+
+  .learn-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 28px 32px;
+    animation: fadeSlideIn 0.25s ease;
+  }
+
+  .learn-panel.show { display: block; }
+
+  .learn-panel h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .learn-panel h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.82rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .learn-panel p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .learn-panel .example-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  @media (max-width: 480px) {
+    .learn-panel .example-pair { grid-template-columns: 1fr; }
+    .answer-buttons { grid-template-columns: 1fr 1fr; }
+    .score-breakdown { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .ex-cell {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .ex-cell.nat { background: var(--natural-bg); border: 1px solid var(--natural-border); color: var(--natural); }
+  .ex-cell.unnat { background: var(--unnatural-bg); border: 1px solid var(--unnatural-border); color: var(--unnatural); }
+
+  .ex-cell .ex-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-style: normal;
+    display: block;
+    margin-bottom: 5px;
+    opacity: 0.7;
+  }
+
+  .learn-divider {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 20px 0;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* ── INTRO SCREEN ── */
+  #intro-screen {
+    text-align: center;
+    animation: fadeSlideIn 0.4s ease;
+  }
+
+  .intro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  .intro-stat {
+    padding: 16px 10px;
+    background: var(--surface-alt);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+  }
+
+  .intro-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .intro-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .intro-desc {
+    font-size: 0.93rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .btn-start {
+    width: 100%;
+    padding: 15px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.18s ease;
+  }
+
+  .btn-start:hover { background: #1f4a8a; transform: translateY(-1px); box-shadow: var(--shadow); }
+
+  /* footer */
+  footer {
+    margin-top: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Collocation Awareness Quiz</div>
+  <h1>Natural English <em>or Not?</em></h1>
+  <p class="subtitle">Distinguishing corpus-based collocations from AI-generated and L2 patterns</p>
+</header>
+
+<div class="card" id="main-card">
+
+  <!-- INTRO SCREEN -->
+  <div id="intro-screen">
+    <div class="intro-stats">
+      <div class="intro-stat">
+        <div class="intro-stat-value">10</div>
+        <div class="intro-stat-label">Questions</div>
+      </div>
+      <div class="intro-stat">
+        <div class="intro-stat-value">~5</div>
+        <div class="intro-stat-label">Minutes</div>
+      </div>
+      <div class="intro-stat">
+        <div class="intro-stat-value">SLA</div>
+        <div class="intro-stat-label">Focus Area</div>
+      </div>
+    </div>
+    <p class="intro-desc">
+      Each sentence below was produced either by a proficient English speaker, or by an AI language model / L2 learner. Your task: judge whether the <strong>underlined collocation</strong> is natural and corpus-attested, or whether it reveals non-native or machine-generated patterns.<br><br>
+      Immediate feedback follows each answer. Explore the <em>Learn More</em> section at the bottom to deepen your understanding of collocations, corpus linguistics, and AI-influenced language.
+    </p>
+    <button class="btn-start" onclick="startQuiz()">
+      Begin Quiz <span>→</span>
+    </button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">Progress</span>
+        <span class="progress-fraction" id="progress-fraction">0 / 10</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="question-number" id="q-number">Question 1 of 10</div>
+    <div class="question-text" id="q-text"></div>
+    <div class="question-type" id="q-type"></div>
+
+    <div class="answer-buttons">
+      <button class="btn-answer" id="btn-natural" onclick="submitAnswer('natural')">
+        <span class="btn-icon">✓</span> Natural
+      </button>
+      <button class="btn-answer" id="btn-unnatural" onclick="submitAnswer('unnatural')">
+        <span class="btn-icon">✗</span> Unnatural
+      </button>
+    </div>
+
+    <div class="feedback" id="feedback">
+      <div class="feedback-verdict" id="fb-verdict"></div>
+      <div class="feedback-title" id="fb-title"></div>
+      <div class="feedback-explanation" id="fb-explanation"></div>
+      <div class="collocation-note" id="fb-note"></div>
+    </div>
+
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+      Next question <span>→</span>
+    </button>
+  </div>
+
+  <!-- SCORE SCREEN -->
+  <div id="score-screen">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">Quiz Complete</p>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:20px;">Your Results</h2>
+
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 100 100">
+          <circle class="score-ring-bg" cx="50" cy="50" r="42"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="50" cy="50" r="42"/>
+        </svg>
+        <div>
+          <div class="score-number" id="score-display">0</div>
+          <div class="score-total">/10</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="score-band-el" class="score-band good"></div>
+
+    <p class="score-message" id="score-message"></p>
+
+    <div class="score-breakdown">
+      <div class="breakdown-cell">
+        <div class="breakdown-value" id="bd-correct" style="color:var(--natural)">0</div>
+        <div class="breakdown-label">Correct</div>
+      </div>
+      <div class="breakdown-cell">
+        <div class="breakdown-value" id="bd-incorrect" style="color:var(--unnatural)">0</div>
+        <div class="breakdown-label">Incorrect</div>
+      </div>
+      <div class="breakdown-cell">
+        <div class="breakdown-value" id="bd-pct">0%</div>
+        <div class="breakdown-label">Accuracy</div>
+      </div>
+    </div>
+
+    <button class="btn-restart" onclick="restartQuiz()">↺ &nbsp;Restart Quiz</button>
+  </div>
+
+</div>
+
+<!-- LEARN MORE -->
+<div class="learn-more-toggle" id="learn-more-section">
+  <button class="learn-toggle-btn" id="learn-btn" onclick="toggleLearn()">
+    <span>📚 &nbsp;Learn More: Collocations, Corpus English & AI Language</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="learn-panel" id="learn-panel">
+    <h2>What is a Collocation?</h2>
+    <p>A collocation is a pair or group of words that habitually co-occur in natural language — not because grammar demands it, but because usage patterns have made them conventional. Native speakers acquire collocations implicitly; L2 learners and AI models often produce near-misses that are grammatically correct but lexically unnatural.</p>
+
+    <h3>Example Pairs</h3>
+    <div class="example-pair">
+      <div class="ex-cell nat">
+        <span class="ex-label">✓ Corpus-attested</span>
+        She <strong>made a decision</strong> to leave early.
+      </div>
+      <div class="ex-cell unnat">
+        <span class="ex-label">✗ L2 / AI pattern</span>
+        She <strong>took a decision</strong> to leave early.
+      </div>
+    </div>
+    <div class="example-pair">
+      <div class="ex-cell nat">
+        <span class="ex-label">✓ Corpus-attested</span>
+        The research <strong>raises awareness</strong> of the issue.
+      </div>
+      <div class="ex-cell unnat">
+        <span class="ex-label">✗ L2 / AI pattern</span>
+        The research <strong>increases awareness</strong> of the issue.
+      </div>
+    </div>
+
+    <hr class="learn-divider">
+
+    <h3>Why AI Language Models Struggle</h3>
+    <p>Large language models are trained on enormous amounts of text, yet they can still produce collocational errors. This happens because LLMs optimise for statistical plausibility across a distribution of text rather than acquiring the deep lexical knowledge that underlies native-speaker intuition. The result: fluent-sounding sentences with slightly off-target word choices.</p>
+    <p>Common AI patterns include: synonym substitution (<em>conduct research</em> → <em>perform research</em>), calques from L1 (e.g. French/Spanish learners writing <em>do a photo</em> for <em>take a photo</em>), and over-generalisation of productive patterns.</p>
+
+    <hr class="learn-divider">
+
+    <h3>Corpus Linguistics & Collocations</h3>
+    <p>Corpus linguistics analyses large, real-world text collections to reveal how words actually combine. Tools like <strong>Sketch Engine</strong>, the <strong>British National Corpus</strong>, and <strong>COCA</strong> (Corpus of Contemporary American English) allow researchers to measure collocation strength using statistics such as <em>MI score</em> (Mutual Information) and <em>t-score</em>.</p>
+    <p>For SLA researchers, corpus data provides an empirical baseline against which learner output — and now AI output — can be compared.</p>
+
+    <hr class="learn-divider">
+
+    <h3>Implications for ELT & MA English Studies</h3>
+    <p>As AI writing tools become widespread, learners may begin to internalise AI-generated patterns as models of correct English. This raises important questions for language pedagogy: How do we teach collocation awareness in an AI-saturated environment? How do we help learners develop the <em>critical linguistic literacy</em> to evaluate AI output?</p>
+    <p>Awareness-raising activities — like this quiz — help develop the metalinguistic sensitivity needed to notice collocational norms and deviations.</p>
+
+    <hr class="learn-divider">
+
+    <h3>Further Reading</h3>
+    <p style="font-size:0.84rem;">Sinclair, J. (1991). <em>Corpus, Concordance, Collocation.</em> OUP. &nbsp;·&nbsp; Nation, I.S.P. (2001). <em>Learning Vocabulary in Another Language.</em> CUP. &nbsp;·&nbsp; Nesselhauf, N. (2005). <em>Collocations in a Learner Corpus.</em> Benjamins. &nbsp;·&nbsp; Granger, S. & Meunier, F. (2008). <em>Phraseology.</em> Benjamins.</p>
+  </div>
+</div>
+
+<footer>
+  Natural English or Not? · Collocation Awareness Quiz · For MA English Studies & Language Learners
+</footer>
+
+<script>
+const questions = [
+  {
+    text: 'The committee agreed to <span class="highlight">make a compromise</span> and move forward.',
+    type: 'Verb–noun collocation',
+    answer: 'unnatural',
+    feedbackTitle: 'The natural collocation is "reach a compromise"',
+    explanation: 'In English, we typically "reach", "find", or "come to" a compromise — not "make" one. The verb "make" collocates strongly with nouns like decision, mistake, and effort, but compromise has its own preferred verb partners in corpus data.',
+    note: 'Corpus preference: reach/find a compromise (BNC, COCA) · "make a compromise" is a common L2 and AI overgeneralisation'
+  },
+  {
+    text: 'The new policy will <span class="highlight">raise awareness</span> of climate change among young people.',
+    type: 'Verb–noun collocation',
+    answer: 'natural',
+    feedbackTitle: '"Raise awareness" is strongly corpus-attested',
+    explanation: 'This is a highly frequent and natural collocation in English. The verb "raise" is the conventional partner for "awareness" in contexts of education, campaigns, and social change. You would not naturally say "increase awareness" or "grow awareness" in most formal registers.',
+    note: 'MI score: very high (BNC/COCA) · Raise awareness: standard in academic, journalistic, and policy writing'
+  },
+  {
+    text: 'She spent hours trying to <span class="highlight">resolve the problem</span>.',
+    type: 'Verb–noun collocation',
+    answer: 'natural',
+    feedbackTitle: '"Resolve a problem" is natural and corpus-attested',
+    explanation: '"Resolve" is a well-established verb partner for "problem" in both formal and informal English. It appears frequently in corpus data alongside alternatives such as "solve" and "address". Both are natural; "resolve" is slightly more formal.',
+    note: 'Natural alternatives: solve, address, tackle, deal with a problem · All corpus-attested'
+  },
+  {
+    text: 'The students were asked to <span class="highlight">do a research</span> on collocations in their second language.',
+    type: 'Article + uncountable noun error',
+    answer: 'unnatural',
+    feedbackTitle: '"Research" is uncountable — "do a research" is ungrammatical',
+    explanation: 'In English, "research" is an uncountable noun and cannot take the indefinite article "a". The natural forms are "do research", "conduct research", or "carry out research". This error is extremely common in L2 writing and is also produced by AI models trained on learner text.',
+    note: 'Correct: do research / conduct research / carry out a study · "Do a research" is a highly frequent L2 error'
+  },
+  {
+    text: 'The CEO gave a <span class="highlight">strong emphasis</span> on the importance of innovation.',
+    type: 'Collocation + preposition',
+    answer: 'unnatural',
+    feedbackTitle: '"Place/put emphasis on" — not "give a strong emphasis"',
+    explanation: 'The standard collocations for emphasis use the verbs "place", "put", or "lay": e.g. "she placed great emphasis on innovation". Alternatively, you can "emphasise" something directly. The construction "give a strong emphasis on" is a blend of patterns and does not appear naturally in corpus data.',
+    note: 'Correct: place/put/lay emphasis on · "Give emphasis to" exists but is rare; "give emphasis on" is an error'
+  },
+  {
+    text: 'After months of negotiations, they finally <span class="highlight">reached an agreement</span>.',
+    type: 'Verb–noun collocation',
+    answer: 'natural',
+    feedbackTitle: '"Reach an agreement" is a core English collocation',
+    explanation: '"Reach an agreement" is one of the highest-frequency verb–noun collocations in professional and journalistic English. Corpus data confirms that "reach" is by far the most frequent verb partner for "agreement" in formal contexts, ahead of "come to" and "sign".',
+    note: 'Corpus frequency: very high · Alternatives: come to / sign / strike an agreement (register-dependent)'
+  },
+  {
+    text: 'The findings have <span class="highlight">deep implications</span> for second language acquisition research.',
+    type: 'Adjective–noun collocation',
+    answer: 'natural',
+    feedbackTitle: '"Deep implications" is a well-established academic collocation',
+    explanation: '"Deep" collocates strongly with abstract nouns in formal English: deep implications, deep understanding, deep analysis, deep concern. It is a common and natural intensifier in academic writing. The alternative "profound implications" is equally natural; both are corpus-attested.',
+    note: 'Academic English preference: deep/profound/far-reaching implications · All corpus-attested'
+  },
+  {
+    text: 'His presentation made a <span class="highlight">heavy impact</span> on the audience.',
+    type: 'Adjective–noun collocation',
+    answer: 'unnatural',
+    feedbackTitle: '"Heavy impact" is not a natural collocation in English',
+    explanation: 'The natural collocates for "impact" are "significant", "major", "great", "profound", or "considerable" — not "heavy". While "heavy" collocates freely with concrete nouns (heavy traffic, heavy rain) and a few abstracts (heavy burden), it does not extend to "impact" in standard British or American English usage.',
+    note: 'Natural: significant/major/profound impact · "Heavy impact" is a calque from several European L1s and appears in AI output'
+  },
+  {
+    text: 'Learners often <span class="highlight">commit errors</span> when they are unsure of the target form.',
+    type: 'Verb–noun collocation',
+    answer: 'unnatural',
+    feedbackTitle: '"Make errors" is the natural collocation — not "commit errors"',
+    explanation: 'English speakers "make" errors and mistakes. The verb "commit" collocates with actions that carry moral weight: commit a crime, commit fraud, commit suicide. Applying it to errors or mistakes gives an unnaturally formal or moralising tone and is not corpus-attested in everyday SLA or pedagogical discourse.',
+    note: 'Correct: make an error/mistake · "Commit an error" occurs in formal legal/medical contexts but is rare and marked'
+  },
+  {
+    text: 'The teacher provided a <span class="highlight">comprehensive overview</span> of collocation theory.',
+    type: 'Adjective–noun collocation',
+    answer: 'natural',
+    feedbackTitle: '"Comprehensive overview" is a natural academic collocation',
+    explanation: '"Comprehensive" is one of the most frequent adjective partners for "overview" in academic English. The pairing is entirely natural and appears widely in textbooks, abstracts, and lecture discourse. It is not an error, even though it is also very common in AI-generated text — frequency alone does not indicate unnaturalness.',
+    note: 'Common in academic writing · Alternatives: broad/general/thorough overview · All corpus-attested'
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const q = questions[currentQ];
+
+  document.getElementById('q-number').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+  document.getElementById('q-text').innerHTML = `"${q.text}"`;
+  document.getElementById('q-type').textContent = `Category: ${q.type}`;
+
+  // Progress
+  const pct = (currentQ / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-fraction').textContent = `${currentQ} / ${questions.length}`;
+
+  // Reset buttons
+  const btnN = document.getElementById('btn-natural');
+  const btnU = document.getElementById('btn-unnatural');
+  btnN.className = 'btn-answer';
+  btnU.className = 'btn-answer';
+  btnN.disabled = false;
+  btnU.disabled = false;
+
+  // Reset feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  document.getElementById('btn-next').className = 'btn-next';
+}
+
+function submitAnswer(choice) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[currentQ];
+  const correct = choice === q.answer;
+  if (correct) score++;
+
+  // Style buttons
+  const btnN = document.getElementById('btn-natural');
+  const btnU = document.getElementById('btn-unnatural');
+  btnN.disabled = true;
+  btnU.disabled = true;
+
+  const correctBtn = q.answer === 'natural' ? btnN : btnU;
+  const wrongBtn = q.answer === 'natural' ? btnU : btnN;
+
+  correctBtn.classList.add('correct-answer');
+  if (!correct) wrongBtn.classList.add('wrong-answer');
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+
+  document.getElementById('fb-verdict').innerHTML = correct
+    ? '✓ &nbsp;Correct'
+    : '✗ &nbsp;Incorrect';
+  document.getElementById('fb-title').textContent = q.feedbackTitle;
+  document.getElementById('fb-explanation').textContent = q.explanation;
+  document.getElementById('fb-note').innerHTML = `<strong>Note:</strong> ${q.note}`;
+
+  document.getElementById('btn-next').className = 'btn-next show';
+  document.getElementById('btn-next').textContent =
+    currentQ < questions.length - 1 ? 'Next question →' : 'See results →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showScore();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showScore() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const ss = document.getElementById('score-screen');
+  ss.className = 'show';
+
+  // Progress fill to 100%
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-fraction').textContent = `${questions.length} / ${questions.length}`;
+
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('bd-correct').textContent = score;
+  document.getElementById('bd-incorrect').textContent = questions.length - score;
+  document.getElementById('bd-pct').textContent = Math.round((score / questions.length) * 100) + '%';
+
+  // Ring animation
+  const circumference = 2 * Math.PI * 42; // ≈ 263.9
+  const filled = (score / questions.length) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDasharray = `${filled} ${circumference}`;
+  }, 100);
+
+  // Band & message
+  const band = document.getElementById('score-band-el');
+  const msg = document.getElementById('score-message');
+  if (score >= 9) {
+    band.className = 'score-band excellent';
+    band.textContent = 'Expert Collocation Awareness';
+    msg.textContent = 'Outstanding. You demonstrate a near-native sensitivity to English collocation norms — a critical skill for both language researchers and advanced learners navigating AI-generated text.';
+  } else if (score >= 7) {
+    band.className = 'score-band good';
+    band.textContent = 'Strong Awareness';
+    msg.textContent = 'Very good. You correctly identified most natural and unnatural patterns. A few tricky cases may warrant deeper exploration of corpus tools and learner error analysis.';
+  } else if (score >= 5) {
+    band.className = 'score-band fair';
+    band.textContent = 'Developing Awareness';
+    msg.textContent = 'A solid foundation. Collocational knowledge develops through extensive reading and corpus consultation. Reviewing the feedback above and the Learn More section below will sharpen your intuitions.';
+  } else {
+    band.className = 'score-band needs-work';
+    band.textContent = 'Room to Grow';
+    msg.textContent = 'Collocations are genuinely difficult — even for advanced learners and sophisticated AI models. We recommend exploring the Learn More section and practising with corpus tools such as Sketch Engine or COCA.';
+  }
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  score = 0;
+  answered = false;
+
+  document.getElementById('score-screen').className = '';
+  document.getElementById('score-screen').style.display = '';
+
+  // Reset ring
+  document.getElementById('ring-fill').style.strokeDasharray = '0 314';
+
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('progress-fill').style.width = '0%';
+  loadQuestion();
+}
+
+function toggleLearn() {
+  const panel = document.getElementById('learn-panel');
+  const btn = document.getElementById('learn-btn');
+  const isOpen = panel.classList.contains('show');
+  panel.classList.toggle('show', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>
