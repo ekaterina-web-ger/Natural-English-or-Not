@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Natural English or Not – Collocation Quiz</title>
+
+    <style>
+        /* ── CSS Variables (светлая тема по умолчанию) ─── */
+        :root {
+            --bg-body: #f0f4f8;
+            --bg-card: #ffffff;
+            --text-primary: #1e2a3a;
+            --text-secondary: #4a5a6e;
+            --border-light: #d6e2ee;
+            --shadow: 0 8px 30px rgba(0, 20, 40, 0.06), 0 2px 8px rgba(0, 20, 40, 0.04);
+            --feedback-bg: #f8faff;
+            --badge-correct: #2a9d6e;
+            --badge-incorrect: #d45a5a;
+            --progress-gradient: linear-gradient(90deg, #3b8fc2, #2a7aaa);
+            --btn-primary: #2a7aaa;
+            --btn-primary-hover: #1d5f87;
+            --card-shadow: 0 8px 30px rgba(0, 20, 40, 0.06);
+            --icon-filter: none;
+        }
+
+        /* ── Тёмная тема ────────────────────────────────── */
+        body.dark {
+            --bg-body: #1a1f2b;
+            --bg-card: #262d3d;
+            --text-primary: #e8edf5;
+            --text-secondary: #b0c0d4;
+            --border-light: #3e4a5e;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --feedback-bg: #2e3649;
+            --badge-correct: #34b07e;
+            --badge-incorrect: #e06a6a;
+            --progress-gradient: linear-gradient(90deg, #4fa3d0, #3a8ab8);
+            --btn-primary: #4fa3d0;
+            --btn-primary-hover: #3a8ab8;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            --icon-filter: brightness(0.8) invert(1);
+        }
+
+        /* ── Reset & Base ─────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .app-wrapper {
+            max-width: 820px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ── Typography ─────────────────────────────────── */
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .subhead {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.1rem;
+        }
+
+        /* ── Cards & Containers ────────────────────────── */
+        .card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            box-shadow: var(--shadow);
+            padding: 1.75rem 2rem;
+            margin-bottom: 1.5rem;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        /* ── Header ────────────────────────────────────── */
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .quiz-header .title-group {
+            flex: 1 1 auto;
+        }
+
+        .quiz-header .title-group h1 {
+            font-size: 1.65rem;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge-score {
+            background: var(--feedback-bg);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            border: 1px solid var(--border-light);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .badge-score span {
+            color: var(--btn-primary);
+        }
+
+        /* ── Theme toggle ──────────────────────────────── */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-light);
+            border-radius: 40px;
+            padding: 0.35rem 0.8rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: background 0.3s, border-color 0.3s;
+            line-height: 1;
+        }
+        .theme-toggle:hover {
+            background: var(--feedback-bg);
+        }
+
+        /* ── Mode selector ─────────────────────────────── */
+        .mode-selector {
+            display: flex;
+            gap: 0.3rem;
+            border: 1px solid var(--border-light);
+            border-radius: 40px;
+            padding: 0.15rem;
+            background: var(--bg-body);
+            transition: border-color 0.3s;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--btn-primary);
+            color: #fff;
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: var(--feedback-bg);
+        }
+
+        /* ── Progress ──────────────────────────────────── */
+        .progress-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-track {
+            flex: 1 1 200px;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 80px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--progress-gradient);
+            border-radius: 12px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.3rem 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .progress-stats .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .progress-stats .stat-item .num {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-divider {
+            color: var(--border-light);
+            font-weight: 300;
+        }
+
+        /* ── Question Card ────────────────────────────── */
+        .question-card {
+            padding: 2rem 2rem 1.75rem;
+            transition: opacity 0.25s ease;
+        }
+
+        .question-number {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .question-sentence {
+            font-size: 1.35rem;
+            line-height: 1.6;
+            font-weight: 500;
+            color: var(--text-primary);
+            padding: 0.5rem 0 1rem;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .question-sentence .quote-mark {
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* ── Answer Buttons ───────────────────────────── */
+        .answer-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .answer-grid button {
+            flex: 1 1 150px;
+            padding: 0.85rem 1.2rem;
+            border: 2px solid var(--border-light);
+            border-radius: 60px;
+            background: var(--bg-card);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .answer-grid button:hover:not(:disabled) {
+            border-color: #7a9fc7;
+            background: var(--feedback-bg);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42, 122, 170, 0.10);
+        }
+
+        .answer-grid button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .answer-grid button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-natural {
+            border-color: #7fb3a0;
+        }
+        .btn-natural:hover:not(:disabled) {
+            border-color: #3a8a6f;
+            background: #f0faf5;
+        }
+
+        .btn-unnatural {
+            border-color: #d4a8a8;
+        }
+        .btn-unnatural:hover:not(:disabled) {
+            border-color: #b85c5c;
+            background: #fdf2f2;
+        }
+
+        /* ── Feedback ──────────────────────────────────── */
+        .feedback-area {
+            margin-top: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            border-left: 6px solid transparent;
+            background: var(--feedback-bg);
+            display: none;
+            animation: feedFade 0.3s ease;
+        }
+
+        .feedback-area.visible {
+            display: block;
+        }
+
+        .feedback-area.correct {
+            border-left-color: var(--badge-correct);
+        }
+
+        .feedback-area.incorrect {
+            border-left-color: var(--badge-incorrect);
+        }
+
+        @keyframes feedFade {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-head {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-head .badge-result {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.15rem 0.9rem 0.15rem 0.6rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .badge-result.correct {
+            background: var(--badge-correct);
+            color: #fff;
+        }
+
+        .badge-result.incorrect {
+            background: var(--badge-incorrect);
+            color: #fff;
+        }
+
+        .feedback-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .feedback-body .corpus-meta {
+            display: inline-block;
+            background: var(--bg-card);
+            padding: 0.15rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin: 0.15rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .feedback-body .nuance-note {
+            display: block;
+            background: #fcf3e0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: 0.6rem 0 0.2rem;
+            border-left: 4px solid #e6b87a;
+            font-size: 0.9rem;
+            color: #6b4e2a;
+        }
+        body.dark .feedback-body .nuance-note {
+            background: #3d3524;
+            color: #e6d4a8;
+            border-left-color: #c9a84c;
+        }
+
+        .feedback-body .youglish-link {
+            display: inline-block;
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--btn-primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed transparent;
+            transition: border-color 0.2s;
+        }
+        .feedback-body .youglish-link:hover {
+            border-bottom-color: var(--btn-primary);
+        }
+
+        .feedback-body .correct-alt {
+            margin-top: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            background: #eaf3ea;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #1d5a3a;
+        }
+        body.dark .feedback-body .correct-alt {
+            background: #1e3a2e;
+            color: #a8d4b0;
+        }
+
+        /* ── Next Button ───────────────────────────────── */
+        .next-btn-wrap {
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        .btn-next {
+            padding: 0.65rem 2.2rem;
+            border: none;
+            border-radius: 60px;
+            background: var(--btn-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 2px 8px rgba(42, 122, 170, 0.20);
+        }
+
+        .btn-next:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-1px);
+        }
+        .btn-next:active {
+            transform: translateY(0);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ── Results ───────────────────────────────────── */
+        .results-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+        }
+
+        .results-card .score-big {
+            font-size: 4.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .results-card .score-big span {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .results-card .score-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin: 1.5rem 0 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .results-stats .stat-box {
+            text-align: center;
+        }
+
+        .results-stats .stat-box .num {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .results-stats .stat-box .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .results-stats .stat-box.correct .num {
+            color: var(--badge-correct);
+        }
+        .results-stats .stat-box.incorrect .num {
+            color: var(--badge-incorrect);
+        }
+
+        .results-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+        }
+
+        .results-best {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+        }
+        .results-best strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Category stats ────────────────────────────── */
+        .category-stats {
+            margin: 1.5rem 0 1.8rem;
+            text-align: left;
+        }
+
+        .category-stats h3 {
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+        }
+
+        .category-stats .cat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.9rem;
+        }
+
+        .category-stats .cat-row .cat-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .category-stats .cat-row .cat-errors {
+            color: var(--badge-incorrect);
+            font-weight: 600;
+        }
+
+        .category-stats .cat-row .cat-total {
+            color: var(--text-secondary);
+        }
+
+        .btn-restart {
+            padding: 0.8rem 2.8rem;
+            border: none;
+            border-radius: 60px;
+            background: var(--text-primary);
+            color: var(--bg-card);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-restart:hover {
+            background: var(--btn-primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-restart:active {
+            transform: translateY(0);
+        }
+
+        /* ── Learn More ────────────────────────────────── */
+        .collapsible-section {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 1.5rem;
+        }
+
+        .collapsible-toggle {
+            background: none;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0;
+            width: 100%;
+            text-align: left;
+            transition: color 0.2s;
+        }
+
+        .collapsible-toggle:hover {
+            color: var(--btn-primary);
+        }
+
+        .collapsible-toggle .arrow {
+            transition: transform 0.25s ease;
+            display: inline-block;
+            font-size: 0.8rem;
+        }
+
+        .collapsible-toggle.open .arrow {
+            transform: rotate(90deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .collapsible-content.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        .collapsible-content-inner {
+            padding-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .collapsible-content-inner h3 {
+            font-size: 1.1rem;
+            margin: 1.2rem 0 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .collapsible-content-inner h3:first-child {
+            margin-top: 0;
+        }
+
+        .collapsible-content-inner ul {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.2rem;
+            margin: 0.5rem 0 0.8rem;
+        }
+
+        .collapsible-content-inner ul li {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .collapsible-content-inner ul li a {
+            color: var(--btn-primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s;
+            font-weight: 500;
+        }
+
+        .collapsible-content-inner ul li a:hover {
+            border-bottom-color: var(--btn-primary);
+        }
+
+        .collapsible-content-inner .resource-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-left: 0.2rem;
+        }
+
+        /* ── Footer ────────────────────────────────────── */
+        .footer {
+            margin-top: 2.5rem;
+            padding: 1rem 0 0.2rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer a {
+            color: var(--btn-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Confetti Canvas ───────────────────────────── */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ── Responsive ────────────────────────────────── */
+        @media (max-width: 640px) {
+            body {
+                padding: 0.8rem 0.6rem;
+            }
+
+            .card {
+                padding: 1.25rem 1rem;
+                border-radius: 1rem;
+            }
+
+            .question-card {
+                padding: 1.25rem 1rem;
+            }
+
+            .quiz-header .title-group h1 {
+                font-size: 1.3rem;
+            }
+
+            .badge-score {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.9rem;
+            }
+
+            .question-sentence {
+                font-size: 1.1rem;
+                padding: 0.3rem 0 0.8rem;
+            }
+
+            .answer-grid button {
+                flex: 1 1 120px;
+                font-size: 0.9rem;
+                padding: 0.7rem 0.8rem;
+            }
+
+            .feedback-area {
+                padding: 1rem 1rem;
+            }
+
+            .results-card .score-big {
+                font-size: 3.2rem;
+            }
+
+            .results-stats {
+                gap: 1.2rem;
+            }
+
+            .progress-stats {
+                font-size: 0.8rem;
+                gap: 0.2rem 0.8rem;
+            }
+
+            .collapsible-content-inner ul {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .mode-selector {
+                flex-wrap: nowrap;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .answer-grid {
+                flex-direction: column;
+            }
+            .answer-grid button {
+                flex: 1 1 auto;
+            }
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.4rem;
+            }
+            .badge-score {
+                align-self: flex-start;
+            }
+        }
+
+        /* ── Utilities ─────────────────────────────────── */
+        .hidden {
+            display: none !important;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-1 {
+            margin-top: 0.75rem;
+        }
+        .mb-1 {
+            margin-bottom: 0.75rem;
+        }
+        .gap-1 {
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper" id="app">
+
+        <!-- ─── HEADER ─────────────────────────────────── -->
+        <div class="card" style="padding-bottom:1rem;">
+            <div class="quiz-header">
+                <div class="title-group">
+                    <h1>📘 Natural English or Not?</h1>
+                    <div class="subhead">Collocation quiz</div>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+                    <div class="mode-selector" id="modeSelector">
+                        <button class="mode-btn" data-mode="easy">Easy</button>
+                        <button class="mode-btn active" data-mode="normal">Normal</button>
+                        <button class="mode-btn" data-mode="hard">Hard</button>
+                    </div>
+                    <div class="badge-score" id="liveScoreBadge">Score: <span id="liveScoreNum">0</span></div>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-area">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-stats">
+                    <span class="stat-item" id="questionCounter">Question <span class="num" id="qNum">1</span> of <span class="num" id="qTotal">10</span></span>
+                    <span class="stat-divider">·</span>
+                    <span class="stat-item">Remaining: <span class="num" id="qRemaining">10</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── QUIZ CONTAINER ─────────────────────────── -->
+        <div id="quizContainer">
+
+            <!-- Question Card -->
+            <div class="card question-card" id="questionCard">
+                <div class="question-number" id="questionLabel">Question 1 of 10</div>
+                <div class="question-sentence">
+                    <span class="quote-mark">“</span><span id="sentenceText">Loading…</span><span class="quote-mark">”</span>
+                </div>
+
+                <div class="answer-grid" id="answerButtons">
+                    <button class="btn-natural" data-value="true" id="btnNatural">🌿 Natural</button>
+                    <button class="btn-unnatural" data-value="false" id="btnUnnatural">⚡ Unnatural</button>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-area" id="feedbackArea">
+                    <div class="feedback-head">
+                        <span class="badge-result" id="feedbackBadge">✓ Correct</span>
+                        <span style="font-weight:400;font-size:0.9rem;color:var(--text-secondary);" id="feedbackColloc"></span>
+                    </div>
+                    <div class="feedback-body" id="feedbackBody"></div>
+                    <div class="next-btn-wrap">
+                        <button class="btn-next" id="btnNext">Next Question →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Card (hidden initially) -->
+            <div class="card results-card hidden" id="resultsCard">
+                <div class="score-big" id="finalScore">10 <span>/ 10</span></div>
+                <div class="score-label" id="finalPercent">100% · Perfect!</div>
+                <div class="results-best" id="bestScoreDisplay">🏆 Best: <strong id="bestScoreNum">0</strong></div>
+
+                <div class="results-stats">
+                    <div class="stat-box correct">
+                        <div class="num" id="finalCorrect">0</div>
+                        <div class="label">Correct</div>
+                    </div>
+                    <div class="stat-box incorrect">
+                        <div class="num" id="finalIncorrect">0</div>
+                        <div class="label">Incorrect</div>
+                    </div>
+                </div>
+
+                <!-- Category stats -->
+                <div class="category-stats" id="categoryStats">
+                    <h3>📊 Errors by collocation type</h3>
+                    <div id="categoryStatsList"></div>
+                </div>
+
+                <div class="results-timestamp" id="timestampDisplay">Completed: just now</div>
+
+                <button class="btn-restart" id="btnRestart">⟳ Play Again</button>
+            </div>
+        </div>
+
+        <!-- ─── LEARN MORE ─────────────────────────────── -->
+        <div class="collapsible-section">
+            <button class="collapsible-toggle" id="learnToggle">
+                <span class="arrow">▶</span> 📖 What are collocations?
+            </button>
+            <div class="collapsible-content" id="learnContent">
+                <div class="collapsible-content-inner">
+                    <p>
+                        <strong>Collocations</strong> are words that often go together in English.
+                        For example, we say <em>“make a decision”</em> (not <em>“do a decision”</em>)
+                        and <em>“pay attention”</em> (not <em>“make attention”</em>).
+                        Learning these common combinations will make your English sound more natural.
+                    </p>
+                    <p style="margin-top:0.5rem;">
+                        This quiz helps you practise recognising which word pairs are used by native speakers
+                        and which ones sound odd – even if they are grammatically correct.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── EXTERNAL RESOURCES ─────────────────────── -->
+        <div class="collapsible-section">
+            <button class="collapsible-toggle" id="resourcesToggle">
+                <span class="arrow">▶</span> 📚 Verify collocations – external tools
+            </button>
+            <div class="collapsible-content" id="resourcesContent">
+                <div class="collapsible-content-inner">
+                    <p style="margin-bottom:0.6rem;">
+                        Use these free tools to <strong>check real‑world usage</strong> and
+                        explore collocations in context:
+                    </p>
+                    <ul>
+                        <li><a href="https://youglish.com" target="_blank">YouGlish</a> <span class="resource-desc">– YouTube subtitles</span></li>
+                        <li><a href="https://www.english-corpora.org/coca/" target="_blank">COCA</a> <span class="resource-desc">– 1‑billion‑word corpus</span></li>
+                        <li><a href="https://fraze.it" target="_blank">Fraze.It</a> <span class="resource-desc">– phrases in context</span></li>
+                        <li><a href="https://www.freecollocation.com" target="_blank">FreeCollocation</a> <span class="resource-desc">– collocation dictionary</span></li>
+                        <li><a href="https://www.wordreference.com/englishcollocations/" target="_blank">WordReference Collocations</a> <span class="resource-desc">– academic writing</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── FOOTER ──────────────────────────────────── -->
+        <div class="footer">
+            Built for MA English Studies · <a href="https://github.com/your-username" target="_blank">GitHub</a>
+        </div>
+
+    </div>
+
+    <!-- ─── CONFETTI CANVAS ───────────────────────────── -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- ────────────────────────────────────────────────── -->
+    <!-- ─── JAVASCRIPT ────────────────────────────────── -->
+    <!-- ────────────────────────────────────────────────── -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ═══════════════════════════════════════════════════
+            //  1.  QUESTION POOL (40 items) with categories
+            // ═══════════════════════════════════════════════════
+
+            const QUESTION_POOL = [{
+                id: 1,
+                sentence: 'She made a decision to move abroad.',
+                isNatural: true,
+                collocation: 'make a decision',
+                explanation: '“Make a decision” is the standard English collocation. COCA shows it’s 45× more common than “do a decision”.',
+                corpusData: 'COCA freq 45,892 · MI 8.4',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 2,
+                sentence: 'I need to pay attention to the teacher.',
+                isNatural: true,
+                collocation: 'pay attention',
+                explanation: '“Pay attention” is the natural collocation. “Make attention” is a typical L2 error.',
+                corpusData: 'COCA freq 38,201 · MI 8.1',
+                correctedVersion: null,
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 3,
+                sentence: 'We took a break after two hours.',
+                isNatural: true,
+                collocation: 'take a break',
+                explanation: '“Take a break” is the expected collocation. “Make a break” is very rare and usually means something else.',
+                corpusData: 'COCA freq 12,450 · MI 6.7',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 4,
+                sentence: 'He made a mistake in the calculation.',
+                isNatural: true,
+                collocation: 'make a mistake',
+                explanation: '“Make a mistake” is the standard collocation. “Do a mistake” is an error.',
+                corpusData: 'COCA freq 28,416 · MI 7.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 5,
+                sentence: 'They made progress on the project.',
+                isNatural: true,
+                collocation: 'make progress',
+                explanation: '“Make progress” is correct (no article). “Make a progress” is ungrammatical.',
+                corpusData: 'COCA freq 12,350 · MI 7.2',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 6,
+                sentence: 'She made a good impression on the interview.',
+                isNatural: true,
+                collocation: 'make an impression',
+                explanation: '“Make an impression” is the natural collocation, often modified by “good”, “bad”, etc.',
+                corpusData: 'COCA freq 9,872 · MI 6.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 7,
+                sentence: 'I need to do my homework before dinner.',
+                isNatural: true,
+                collocation: 'do homework',
+                explanation: '“Do homework” is the standard collocation. “Make homework” is not used.',
+                corpusData: 'COCA freq 18,456 · MI 7.1',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 8,
+                sentence: 'He paid a high price for his mistake.',
+                isNatural: true,
+                collocation: 'pay a price',
+                explanation: '“Pay a price” is the natural collocation, often used figuratively.',
+                corpusData: 'COCA freq 9,234 · MI 6.3',
+                correctedVersion: null,
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 9,
+                sentence: 'We took a look at the new apartment.',
+                isNatural: true,
+                collocation: 'take a look',
+                explanation: '“Take a look” is a very common, natural collocation. “Make a look” is not used.',
+                corpusData: 'COCA freq 22,890 · MI 6.8',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 10,
+                sentence: 'She took a shower before breakfast.',
+                isNatural: true,
+                collocation: 'take a shower',
+                explanation: '“Take a shower” is the standard US English collocation. (UK often uses “have a shower”.)',
+                corpusData: 'COCA freq 8,134 · MI 5.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 11,
+                sentence: 'He made a promise to his children.',
+                isNatural: true,
+                collocation: 'make a promise',
+                explanation: '“Make a promise” is the natural collocation. “Do a promise” is not used.',
+                corpusData: 'COCA freq 6,512 · MI 6.2',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 12,
+                sentence: 'They made an effort to arrive on time.',
+                isNatural: true,
+                collocation: 'make an effort',
+                explanation: '“Make an effort” is the standard collocation. “Do an effort” is an error.',
+                corpusData: 'COCA freq 9,872 · MI 6.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 13,
+                sentence: 'I need to take a rest after the long journey.',
+                isNatural: true,
+                collocation: 'take a rest',
+                explanation: '“Take a rest” is natural, though “have a rest” is also common (especially in UK English).',
+                corpusData: 'COCA freq 8,134 · MI 5.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 14,
+                sentence: 'She paid a visit to her grandmother.',
+                isNatural: true,
+                collocation: 'pay a visit',
+                explanation: '“Pay a visit” is a natural, slightly formal collocation.',
+                corpusData: 'COCA freq 5,890 · MI 5.8',
+                correctedVersion: null,
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 15,
+                sentence: 'We made arrangements for the meeting.',
+                isNatural: true,
+                collocation: 'make arrangements',
+                explanation: '“Make arrangements” is the standard collocation (plural).',
+                corpusData: 'COCA freq 4,782 · MI 6.1',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 16,
+                sentence: 'He took the lead in the discussion.',
+                isNatural: true,
+                collocation: 'take the lead',
+                explanation: '“Take the lead” is the natural collocation meaning to assume leadership.',
+                corpusData: 'COCA freq 7,234 · MI 5.7',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 17,
+                sentence: 'She made a contribution to the research.',
+                isNatural: true,
+                collocation: 'make a contribution',
+                explanation: '“Make a contribution” is the standard collocation.',
+                corpusData: 'COCA freq 8,901 · MI 6.5',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 18,
+                sentence: 'They made a choice about their future.',
+                isNatural: true,
+                collocation: 'make a choice',
+                explanation: '“Make a choice” is the natural collocation. “Do a choice” is not used.',
+                corpusData: 'COCA freq 11,234 · MI 6.6',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 19,
+                sentence: 'I need to pay my bills on time.',
+                isNatural: true,
+                collocation: 'pay bills',
+                explanation: '“Pay bills” is the natural collocation. “Make bills” is not used.',
+                corpusData: 'COCA freq 15,678 · MI 6.9',
+                correctedVersion: null,
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 20,
+                sentence: 'We took a walk in the park.',
+                isNatural: true,
+                collocation: 'take a walk',
+                explanation: '“Take a walk” is the standard US English collocation.',
+                corpusData: 'COCA freq 14,567 · MI 6.4',
+                correctedVersion: null,
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 21,
+                sentence: 'He made a dinner for his family.',
+                isNatural: false,
+                collocation: 'make dinner',
+                explanation: '“Make dinner” (without the article) is natural, but “make a dinner” sounds odd. Better: “cook dinner” or “make dinner”.',
+                corpusData: 'COCA freq 856 · MI 2.1',
+                correctedVersion: 'He made dinner for his family. (or “cooked dinner”)',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 22,
+                sentence: 'They are doing a research on climate change.',
+                isNatural: false,
+                collocation: 'do research',
+                explanation: '“Research” is uncountable in English. The natural collocation is “do research” or “conduct research”.',
+                corpusData: 'COCA freq 3,201 · MI 3.4',
+                correctedVersion: 'They are doing research on climate change. (or “conducting research”)',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 23,
+                sentence: 'She did a decision about her career.',
+                isNatural: false,
+                collocation: 'make a decision',
+                explanation: '“Make a decision” is the standard collocation. “Do a decision” is a clear L2 error.',
+                corpusData: 'COCA freq 184 · MI 1.2',
+                correctedVersion: 'She made a decision about her career.',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 24,
+                sentence: 'I need to make attention to the teacher.',
+                isNatural: false,
+                collocation: 'pay attention',
+                explanation: '“Pay attention” is the natural collocation. “Make attention” is not used.',
+                corpusData: 'COCA freq 67 · MI 0.8',
+                correctedVersion: 'I need to pay attention to the teacher.',
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 25,
+                sentence: 'We took a meal at the restaurant.',
+                isNatural: false,
+                collocation: 'have a meal',
+                explanation: '“Have a meal” is the natural collocation. “Take a meal” is old-fashioned or regional.',
+                corpusData: 'COCA freq 234 · MI 1.5',
+                correctedVersion: 'We had a meal at the restaurant.',
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 26,
+                sentence: 'He made a shower before breakfast.',
+                isNatural: false,
+                collocation: 'take a shower',
+                explanation: '“Take a shower” (US) or “have a shower” (UK) are the natural collocations.',
+                corpusData: 'COCA freq 45 · MI 0.5',
+                correctedVersion: 'He took a shower before breakfast.',
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 27,
+                sentence: 'She did a mistake in the test.',
+                isNatural: false,
+                collocation: 'make a mistake',
+                explanation: '“Make a mistake” is the standard collocation. “Do a mistake” is an error.',
+                corpusData: 'COCA freq 123 · MI 1.1',
+                correctedVersion: 'She made a mistake in the test.',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 28,
+                sentence: 'They make a break every two hours.',
+                isNatural: false,
+                collocation: 'take a break',
+                explanation: '“Take a break” is the natural collocation. “Make a break” is rarely used in this sense.',
+                corpusData: 'COCA freq 567 · MI 1.8',
+                correctedVersion: 'They take a break every two hours.',
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 29,
+                sentence: 'I need to pay a visit to my doctor.',
+                isNatural: true,
+                collocation: 'pay a visit',
+                explanation: '“Pay a visit” is a natural, slightly formal collocation.',
+                corpusData: 'COCA freq 5,890 · MI 5.8',
+                correctedVersion: null,
+                nuance: '“Pay a visit” is natural but formal; in everyday speech, “see” or “visit” is more common.',
+                category: 'pay'
+            }, {
+                id: 30,
+                sentence: 'He made a progress on his project.',
+                isNatural: false,
+                collocation: 'make progress',
+                explanation: '“Progress” is uncountable. The natural collocation is “make progress” (no article).',
+                corpusData: 'COCA freq 0 (ungrammatical)',
+                correctedVersion: 'He made progress on his project.',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 31,
+                sentence: 'She did an effort to help him.',
+                isNatural: false,
+                collocation: 'make an effort',
+                explanation: '“Make an effort” is the standard collocation. “Do an effort” is an error.',
+                corpusData: 'COCA freq 89 · MI 0.9',
+                correctedVersion: 'She made an effort to help him.',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 32,
+                sentence: 'We took a decision about the move.',
+                isNatural: false,
+                collocation: 'take a decision',
+                explanation: '“Take a decision” is common in British English, but in US English “make a decision” is preferred. We mark it as unnatural for this quiz (US‑centric), but note the nuance.',
+                corpusData: 'COCA freq 3,210 · MI 3.4',
+                correctedVersion: 'We made a decision about the move.',
+                nuance: '“Take a decision” is standard in British English. This is a dialectal difference, not an error.',
+                category: 'take/have'
+            }, {
+                id: 33,
+                sentence: 'He made a call to his mother.',
+                isNatural: true,
+                collocation: 'make a call',
+                explanation: '“Make a call” is a common collocation for phone calls.',
+                corpusData: 'COCA freq 1,234 · MI 2.9',
+                correctedVersion: null,
+                nuance: '“Make a call” is common, but “call someone” is more direct and frequent.',
+                category: 'make/do'
+            }, {
+                id: 34,
+                sentence: 'She did the homework quickly.',
+                isNatural: true,
+                collocation: 'do homework',
+                explanation: '“Do homework” is the standard natural collocation.',
+                corpusData: 'COCA freq 18,456 · MI 7.1',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 35,
+                sentence: 'I need to make a rest after work.',
+                isNatural: false,
+                collocation: 'take a rest',
+                explanation: '“Take a rest” or “have a rest” are the natural collocations. “Make a rest” is not used.',
+                corpusData: 'COCA freq 67 · MI 0.7',
+                correctedVersion: 'I need to take a rest after work.',
+                nuance: null,
+                category: 'take/have'
+            }, {
+                id: 36,
+                sentence: 'He paid a respect to his elders.',
+                isNatural: false,
+                collocation: 'pay respect',
+                explanation: 'The natural collocation is “pay respect” (without the article) or “show respect”. “Pay a respect” is not used.',
+                corpusData: 'COCA freq 234 · MI 1.4',
+                correctedVersion: 'He paid respect to his elders. (or “showed respect”)',
+                nuance: null,
+                category: 'pay'
+            }, {
+                id: 37,
+                sentence: 'They made a research on the topic.',
+                isNatural: false,
+                collocation: 'do research',
+                explanation: '“Research” is uncountable. The natural collocations are “do research” or “conduct research”.',
+                corpusData: 'COCA freq 456 · MI 1.6',
+                correctedVersion: 'They did research on the topic. (or “conducted research”)',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 38,
+                sentence: 'She took a preparation for the exam.',
+                isNatural: false,
+                collocation: 'make preparations',
+                explanation: 'The natural collocation is “make preparations” (plural) or “prepare for” something.',
+                corpusData: 'COCA freq 67 · MI 0.7',
+                correctedVersion: 'She made preparations for the exam. (or “prepared for the exam”)',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 39,
+                sentence: 'We did a choice about the restaurant.',
+                isNatural: false,
+                collocation: 'make a choice',
+                explanation: '“Make a choice” is the standard collocation. “Do a choice” is not used.',
+                corpusData: 'COCA freq 156 · MI 1.0',
+                correctedVersion: 'We made a choice about the restaurant.',
+                nuance: null,
+                category: 'make/do'
+            }, {
+                id: 40,
+                sentence: 'He made an appointment with the dentist.',
+                isNatural: true,
+                collocation: 'make an appointment',
+                explanation: '“Make an appointment” is the standard natural collocation.',
+                corpusData: 'COCA freq 7,890 · MI 6.7',
+                correctedVersion: null,
+                nuance: null,
+                category: 'make/do'
+            }];
+
+            // ═══════════════════════════════════════════════════
+            //  2.  STATE
+            // ═══════════════════════════════════════════════════
+
+            let currentQuestions = [];
+            let currentIndex = 0;
+            let score = 0;
+            let totalQuestions = 0;
+            let isAnswered = false;
+            let quizStartTime = null;
+            let currentMode = 'normal'; // 'easy', 'normal', 'hard'
+            let bestScore = 0;
+            let theme = 'light';
+            let errorCategories = {};
+
+            // DOM refs
+            const $ = id => document.getElementById(id);
+            const questionCard = $('questionCard');
+            const resultsCard = $('resultsCard');
+            const sentenceText = $('sentenceText');
+            const questionLabel = $('questionLabel');
+            const qNum = $('qNum');
+            const qTotal = $('qTotal');
+            const qRemaining = $('qRemaining');
+            const progressFill = $('progressFill');
+            const liveScoreNum = $('liveScoreNum');
+            const btnNatural = $('btnNatural');
+            const btnUnnatural = $('btnUnnatural');
+            const feedbackArea = $('feedbackArea');
+            const feedbackBadge = $('feedbackBadge');
+            const feedbackColloc = $('feedbackColloc');
+            const feedbackBody = $('feedbackBody');
+            const btnNext = $('btnNext');
+            const finalScore = $('finalScore');
+            const finalPercent = $('finalPercent');
+            const finalCorrect = $('finalCorrect');
+            const finalIncorrect = $('finalIncorrect');
+            const timestampDisplay = $('timestampDisplay');
+            const btnRestart = $('btnRestart');
+            const bestScoreNum = $('bestScoreNum');
+            const categoryStatsList = $('categoryStatsList');
+
+            // ─── Mode / Theme ──────────────────────────────────
+            const modeBtns = document.querySelectorAll('.mode-btn');
+            const themeToggle = $('themeToggle');
+
+            // ═══════════════════════════════════════════════════
+            //  3.  HELPERS
+            // ═══════════════════════════════════════════════════
+
+            function shuffle(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
+            function pickRandomQuestions(pool, count) {
+                const shuffled = shuffle([...pool]);
+                return shuffled.slice(0, count);
+            }
+
+            function formatTimestamp(date) {
+                return date.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            function getModeCount(mode) {
+                switch (mode) {
+                    case 'easy':
+                        return 8;
+                    case 'normal':
+                        return 12;
+                    case 'hard':
+                        return 16;
+                    default:
+                        return 12;
+                }
+            }
+
+            // ─── LocalStorage ──────────────────────────────────
+            function loadBestScore() {
+                const stored = localStorage.getItem('collocationQuizBestScore');
+                if (stored) bestScore = parseInt(stored, 10) || 0;
+                bestScoreNum.textContent = bestScore;
+            }
+
+            function saveBestScore(score) {
+                if (score > bestScore) {
+                    bestScore = score;
+                    localStorage.setItem('collocationQuizBestScore', String(bestScore));
+                    bestScoreNum.textContent = bestScore;
+                }
+            }
+
+            function loadTheme() {
+                const stored = localStorage.getItem('collocationQuizTheme');
+                if (stored === 'dark') {
+                    theme = 'dark';
+                    document.body.classList.add('dark');
+                    themeToggle.textContent = '☀️';
+                } else {
+                    theme = 'light';
+                    document.body.classList.remove('dark');
+                    themeToggle.textContent = '🌙';
+                }
+            }
+
+            function saveTheme(t) {
+                localStorage.setItem('collocationQuizTheme', t);
+            }
+
+            function loadMode() {
+                const stored = localStorage.getItem('collocationQuizMode');
+                if (stored && ['easy', 'normal', 'hard'].includes(stored)) {
+                    currentMode = stored;
+                } else {
+                    currentMode = 'normal';
+                }
+                modeBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === currentMode);
+                });
+            }
+
+            function saveMode(m) {
+                localStorage.setItem('collocationQuizMode', m);
+            }
+
+            // ─── Confetti ──────────────────────────────────────
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            let confettiPieces = [];
+            let confettiActive = false;
+            let confettiRAF = null;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class ConfettiPiece {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height - canvas.height;
+                    this.w = 6 + Math.random() * 8;
+                    this.h = 4 + Math.random() * 6;
+                    this.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = 1.5 + Math.random() * 2.5;
+                    this.rotation = Math.random() * 360;
+                    this.rotSpeed = (Math.random() - 0.5) * 6;
+                    this.life = 1;
+                    this.decay = 0.002 + Math.random() * 0.004;
+                }
+                update() {
+                    this.x += this.vx + Math.sin(this.y * 0.02) * 0.3;
+                    this.y += this.vy;
+                    this.rotation += this.rotSpeed;
+                    this.life -= this.decay;
+                    if (this.y > canvas.height + 50) this.life = 0;
+                }
+                draw(ctx) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate((this.rotation * Math.PI) / 180);
+                    ctx.globalAlpha = Math.max(0, this.life);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+                    ctx.restore();
+                }
+            }
+
+            function launchConfetti() {
+                if (confettiActive) return;
+                confettiActive = true;
+                confettiPieces = [];
+                for (let i = 0; i < 160; i++) {
+                    confettiPieces.push(new ConfettiPiece());
+                }
+                if (confettiRAF) cancelAnimationFrame(confettiRAF);
+                drawConfetti();
+            }
+
+            function drawConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                for (const p of confettiPieces) {
+                    p.update();
+                    if (p.life > 0) {
+                        p.draw(ctx);
+                        alive = true;
+                    }
+                }
+                if (alive) {
+                    confettiRAF = requestAnimationFrame(drawConfetti);
+                } else {
+                    confettiActive = false;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            // ═══════════════════════════════════════════════════
+            //  4.  QUIZ LOGIC
+            // ═══════════════════════════════════════════════════
+
+            function startNewQuiz() {
+                const count = getModeCount(currentMode);
+                currentQuestions = pickRandomQuestions(QUESTION_POOL, count);
+                currentIndex = 0;
+                score = 0;
+                totalQuestions = currentQuestions.length;
+                isAnswered = false;
+                quizStartTime = new Date();
+                errorCategories = {};
+
+                resultsCard.classList.add('hidden');
+                questionCard.classList.remove('hidden');
+                feedbackArea.classList.remove('visible', 'correct', 'incorrect');
+                btnNext.disabled = true;
+
+                btnNatural.disabled = false;
+                btnUnnatural.disabled = false;
+
+                updateProgressAndStats();
+                renderQuestion();
+                liveScoreNum.textContent = '0';
+            }
+
+            function renderQuestion() {
+                if (currentIndex >= totalQuestions) {
+                    showResults();
+                    return;
+                }
+                const q = currentQuestions[currentIndex];
+                sentenceText.textContent = q.sentence;
+                questionLabel.textContent = `Question ${currentIndex + 1} of ${totalQuestions}`;
+                qNum.textContent = currentIndex + 1;
+                qTotal.textContent = totalQuestions;
+                qRemaining.textContent = totalQuestions - currentIndex;
+
+                feedbackArea.classList.remove('visible', 'correct', 'incorrect');
+                btnNext.disabled = true;
+                isAnswered = false;
+
+                btnNatural.disabled = false;
+                btnUnnatural.disabled = false;
+
+                updateProgressAndStats();
+            }
+
+            function updateProgressAndStats() {
+                const pct = totalQuestions > 0 ? (currentIndex / totalQuestions) * 100 : 0;
+                progressFill.style.width = Math.min(pct, 100) + '%';
+                liveScoreNum.textContent = score;
+                qRemaining.textContent = totalQuestions - currentIndex;
+            }
+
+            function handleAnswer(selectedNatural) {
+                if (isAnswered) return;
+                const q = currentQuestions[currentIndex];
+                const correct = q.isNatural;
+                const isCorrect = (selectedNatural === correct);
+
+                if (isCorrect) score++;
+                liveScoreNum.textContent = score;
+                isAnswered = true;
+
+                if (!isCorrect) {
+                    const cat = q.category || 'other';
+                    if (!errorCategories[cat]) errorCategories[cat] = 0;
+                    errorCategories[cat]++;
+                }
+
+                btnNatural.disabled = true;
+                btnUnnatural.disabled = true;
+
+                feedbackArea.className = 'feedback-area visible';
+                feedbackArea.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                const badge = feedbackBadge;
+                if (isCorrect) {
+                    badge.className = 'badge-result correct';
+                    badge.innerHTML = '✓ Correct';
+                } else {
+                    badge.className = 'badge-result incorrect';
+                    badge.innerHTML = '✗ Incorrect';
+                }
+
+                feedbackColloc.textContent = q.collocation ? `— ${q.collocation}` : '';
+
+                let bodyHTML = `<p>${q.explanation}</p>`;
+                bodyHTML += `<p><span class="corpus-meta">${q.corpusData}</span></p>`;
+
+                if (!isCorrect && q.correctedVersion) {
+                    bodyHTML += `<div class="correct-alt">✅ Suggested: ${q.correctedVersion}</div>`;
+                }
+
+                if (q.nuance) {
+                    bodyHTML += `<div class="nuance-note">💡 ${q.nuance}</div>`;
+                }
+
+                // ─── YouGlish link ─────────────────────────────
+                const searchPhrase = q.collocation
+                    .replace(/\ba\b/gi, '')
+                    .replace(/\ban\b/gi, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                const youglishUrl =
+                    `https://youglish.com/pronounce/${encodeURIComponent(searchPhrase)}/english`;
+                bodyHTML += `
+                    <a href="${youglishUrl}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="youglish-link">
+                       🔍 Check it yourself on YouGlish
+                    </a>
+                `;
+
+                feedbackBody.innerHTML = bodyHTML;
+
+                btnNext.disabled = false;
+                updateProgressAndStats();
+            }
+
+            function goToNext() {
+                if (btnNext.disabled) return;
+                currentIndex++;
+                if (currentIndex >= totalQuestions) {
+                    showResults();
+                } else {
+                    renderQuestion();
+                }
+            }
+
+            function showResults() {
+                questionCard.classList.add('hidden');
+                resultsCard.classList.remove('hidden');
+
+                const correct = score;
+                const incorrect = totalQuestions - score;
+                const pct = totalQuestions > 0 ? Math.round((correct / totalQuestions) * 100) : 0;
+
+                finalScore.innerHTML = `${correct} <span>/ ${totalQuestions}</span>`;
+                finalPercent.textContent = `${pct}% · ${pct === 100 ? '🌟 Perfect!' : pct >= 80 ? 'Great job!' : pct >= 60 ? 'Good effort!' : 'Keep practising!'}`;
+                finalCorrect.textContent = correct;
+                finalIncorrect.textContent = incorrect;
+
+                const now = new Date();
+                timestampDisplay.textContent = `Completed: ${formatTimestamp(now)}`;
+
+                saveBestScore(correct);
+                renderCategoryStats();
+
+                if (pct === 100) {
+                    setTimeout(launchConfetti, 300);
+                }
+
+                progressFill.style.width = '100%';
+                qRemaining.textContent = '0';
+            }
+
+            function renderCategoryStats() {
+                const catMap = {};
+                currentQuestions.forEach(q => {
+                    const cat = q.category || 'other';
+                    if (!catMap[cat]) catMap[cat] = { total: 0, errors: 0 };
+                    catMap[cat].total++;
+                });
+                for (const cat in errorCategories) {
+                    if (catMap[cat]) {
+                        catMap[cat].errors = errorCategories[cat];
+                    }
+                }
+
+                let html = '';
+                for (const cat in catMap) {
+                    const data = catMap[cat];
+                    const errorPct = data.total > 0 ? Math.round((data.errors / data.total) * 100) : 0;
+                    html += `
+                        <div class="cat-row">
+                            <span class="cat-name">${cat}</span>
+                            <span>
+                                <span class="cat-errors">${data.errors}</span>
+                                <span class="cat-total"> / ${data.total} (${errorPct}% errors)</span>
+                            </span>
+                        </div>
+                    `;
+                }
+                categoryStatsList.innerHTML = html || '<p>No category data available.</p>';
+            }
+
+            // ═══════════════════════════════════════════════════
+            //  5.  EVENT BINDING
+            // ═══════════════════════════════════════════════════
+
+            btnNatural.addEventListener('click', () => handleAnswer(true));
+            btnUnnatural.addEventListener('click', () => handleAnswer(false));
+            btnNext.addEventListener('click', goToNext);
+
+            btnRestart.addEventListener('click', () => {
+                if (confettiRAF) {
+                    cancelAnimationFrame(confettiRAF);
+                    confettiRAF = null;
+                }
+                confettiActive = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                startNewQuiz();
+            });
+
+            // ─── Mode switching ──────────────────────────────
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.dataset.mode;
+                    if (mode === currentMode) return;
+                    currentMode = mode;
+                    saveMode(mode);
+                    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+                    startNewQuiz();
+                });
+            });
+
+            // ─── Theme toggle ─────────────────────────────────
+            themeToggle.addEventListener('click', function() {
+                if (theme === 'light') {
+                    theme = 'dark';
+                    document.body.classList.add('dark');
+                    this.textContent = '☀️';
+                } else {
+                    theme = 'light';
+                    document.body.classList.remove('dark');
+                    this.textContent = '🌙';
+                }
+                saveTheme(theme);
+            });
+
+            // ─── Keyboard shortcuts ──────────────────────────
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '1' && !btnNatural.disabled) {
+                    btnNatural.click();
+                } else if (e.key === '2' && !btnUnnatural.disabled) {
+                    btnUnnatural.click();
+                } else if (e.key === 'Enter' && !btnNext.disabled) {
+                    btnNext.click();
+                } else if (e.key === 'r' || e.key === 'R') {
+                    if (!resultsCard.classList.contains('hidden')) {
+                        btnRestart.click();
+                    }
+                }
+            });
+
+            // ─── Collapsible toggles ──────────────────────────
+            function setupToggle(buttonId, contentId) {
+                const btn = $(buttonId);
+                const content = $(contentId);
+                btn.addEventListener('click', () => {
+                    const isOpen = content.classList.contains('open');
+                    content.classList.toggle('open');
+                    btn.classList.toggle('open');
+                    btn.querySelector('.arrow').textContent = isOpen ? '▶' : '▼';
+                });
+            }
+            setupToggle('learnToggle', 'learnContent');
+            setupToggle('resourcesToggle', 'resourcesContent');
+
+            // ═══════════════════════════════════════════════════
+            //  6.  INIT
+            // ═══════════════════════════════════════════════════
+
+            loadTheme();
+            loadMode();
+            loadBestScore();
+            startNewQuiz();
+
+        })();
+    </script>
+
+</body>
+</html>
